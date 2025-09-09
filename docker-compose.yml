@@ -1,4 +1,3 @@
-
 version: "3.9"
 services:
   postgres:
@@ -6,18 +5,14 @@ services:
     container_name: postgres_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: abu
-      POSTGRES_PASSWORD: strong_password
+      POSTGRES_USER: abuAmmar
+      POSTGRES_PASSWORD: Ammar2025   
       POSTGRES_DB: data_engineering
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
-      - ./init:/docker-entrypoint-initdb.d
-      - ./data_files:/docker-entrypoint-initdb.d
-      # Mount your dataset folder inside the container
-      - pg_data:/var/lib/postgresql/data   # Persistent PostgreSQL data
-      - ./scripts:/docker-entrypoint-initdb.d  # Store your SQL scripts      
+      - pg_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d  # Single init folder
       - /home/abuammar/Documents/practice_DE_PROJECT/sql-data-warehouse-project-main/datasets:/tmp/csv/datasets
 
   pgadmin:
@@ -25,11 +20,12 @@ services:
     container_name: pgadmin
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@local.com
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
       - "8081:80"
     depends_on:
       - postgres
+
 volumes:
   pg_data:
