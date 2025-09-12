@@ -1,0 +1,4 @@
+sudo rm -rf /tmp/csv # optional 
+ mkdir -p /tmp/csv 
+ cp -r  "/home/abuammar/Documents/practice_DE_PROJECT/sql-data-warehouse-project-main/datasets" /tmp/csv/ 
+ chmod -R 755 /tmp/csv 

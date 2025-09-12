@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.4" use-changelog="false" last-position="0,0" last-zoom="1" max-obj-count="7"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="data_warehouse" is-template="true" allow-conns="true">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[This is an implementation of SQL Data Warehouse Project, with six source files, 3 from crm and remaining 3 from erp.
+The goal of the project is to load the data - Bronze Layer, Clean and Transform it - Silver Layer and lastly integrate and further transformation to a business analytics ready data (dim/fact) - Gold Layer.]]></comment>
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="Bronze" layers="0" alias="Staging Layer" rect-visible="true" fill-color="#e1e1e1">
+	<role name="postgres"/>
+	<comment><![CDATA[This schema serve as schema to load the raw as-is.]]></comment>
+</schema>
+
+<schema name="Silver Layer" layers="0" rect-visible="true" fill-color="#e1e1e1">
+	<role name="postgres"/>
+	<comment><![CDATA[This is where the cleaning and transformation but not business rule transformation take place. Gettting the data ready for the Gold Layer.]]></comment>
+</schema>
+
+<schema name="Gold Layer" layers="0" alias="Marts" rect-visible="true" fill-color="#e1e1e1">
+	<role name="postgres"/>
+	<comment><![CDATA[This is the business analytics ready layer. ]]></comment>
+</schema>
+
+<table name="crm_cust_info" layers="0" alias="Customer master information raw data" collapse-mode="2" max-obj-count="8" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Customer master information raw data]]></comment>
+	<position x="40" y="40"/>
+	<column name="cst_id" not-null="true">
+		<type name="int2" length="0"/>
+		<comment><![CDATA[e.g
+11000
+11001
+11002
+]]></comment>
+	</column>
+	<column name="cst_key" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g
+AW00011000
+AW00011001
+AW00011002
+]]></comment>
+	</column>
+	<column name="cst_firstname">
+		<type name="char" length="0"/>
+	</column>
+	<column name="cst_lastname">
+		<type name="char" length="0"/>
+	</column>
+	<column name="cst_marital_status">
+		<type name="char" length="0"/>
+	</column>
+	<column name="cst_gndr">
+		<type name="char" length="0"/>
+	</column>
+	<column name="cst_create_date">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="crm_cust_info_pk" type="pk-constr" table="&quot;Bronze&quot;.crm_cust_info">
+		<columns names="cst_key,cst_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="crm_prd_info" layers="0" alias="Product master information raw data" collapse-mode="2" max-obj-count="10" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Product master information raw data]]></comment>
+	<position x="840" y="20"/>
+	<column name="prd-id" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[e.g
+210
+211
+212
+]]></comment>
+	</column>
+	<column name="prd_key" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g
+CO-RF-FR-R92B-58
+CO-RF-FR-R92R-58
+AC-HE-HL-U509-R
+]]></comment>
+	</column>
+	<column name="prd_cost">
+		<type name="char" length="0"/>
+	</column>
+	<column name="prd_line">
+		<type name="char" length="0"/>
+	</column>
+	<column name="prd_start_dt">
+		<type name="date" length="0"/>
+	</column>
+	<column name="prd_end_dt">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="crm_prd_info_pk" type="pk-constr" table="&quot;Bronze&quot;.crm_prd_info">
+		<columns names="prd_key,prd-id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="erp_cust_az12" layers="0" alias="cust_info 2" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Additional information about customer (cid, dob and gender)
+
+]]></comment>
+	<position x="340" y="380"/>
+	<column name="cid" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g 
+NASAW00011000
+NASAW00011001
+NASAW00011002]]></comment>
+	</column>
+	<column name="bdate">
+		<type name="date" length="0"/>
+	</column>
+	<column name="gen">
+		<type name="char" length="0"/>
+	</column>
+	<constraint name="erp_cust_az12_pl" type="pk-constr" table="&quot;Bronze&quot;.erp_cust_az12">
+		<columns names="cid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="crm_sales_details_cp" layers="0" alias="sales" collapse-mode="2" max-obj-count="13" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Sales master information raw data]]></comment>
+	<position x="460" y="40"/>
+	<column name="sls_ord_num" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g
+SO43697
+SO43698
+SO43699]]></comment>
+	</column>
+	<column name="sls_prd_key" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g
+BK-R93R-62
+BK-M82S-44
+BK-M82S-44
+]]></comment>
+	</column>
+	<column name="sls_cust_id" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[e.g
+21768
+28389
+25863
+]]></comment>
+	</column>
+	<column name="sls_ord_dt">
+		<type name="date" length="0"/>
+	</column>
+	<column name="sls_ship_dt">
+		<type name="date" length="0"/>
+	</column>
+	<column name="sls_due_dt">
+		<type name="date" length="0"/>
+	</column>
+	<column name="sls_sales" alias="sales">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[sls_price x sls_quantity]]></comment>
+	</column>
+	<column name="sls_quantity" alias="quantity">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[Quantity bought]]></comment>
+	</column>
+	<column name="sls_price" alias="price">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[Price per product]]></comment>
+	</column>
+	<constraint name="crm_sales_details_pk" type="pk-constr" table="&quot;Bronze&quot;.crm_sales_details_cp">
+		<columns names="sls_prd_key,sls_cust_id,sls_ord_num" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="erp_loc_A101" layers="0" alias="cntry" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Additional information about customer (cid, dob and gender)]]></comment>
+	<position x="20" y="400"/>
+	<column name="cid" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g
+AW-00011000
+AW-00011001
+AW-00011002
+AW-00011003]]></comment>
+	</column>
+	<column name="gen">
+		<type name="char" length="0"/>
+	</column>
+	<constraint name="erp_loc_A101_pk" type="pk-constr" table="&quot;Bronze&quot;.&quot;erp_loc_A101&quot;">
+		<columns names="cid" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="erp_px_cat_g1v2" layers="0" alias="cntry" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="&quot;Bronze&quot;"/>
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Additional information about customer (cid, dob and gender)]]></comment>
+	<position x="820" y="380"/>
+	<column name="id" not-null="true">
+		<type name="char" length="0"/>
+		<comment><![CDATA[e.g 
+AC_BR 
+AC_BS,
+AC_CL]]></comment>
+	</column>
+	<column name="cat" alias="product_category">
+		<type name="char" length="0"/>
+		<comment><![CDATA[Product Category]]></comment>
+	</column>
+	<column name="subcat" alias="product_subcategory">
+		<type name="char" length="0"/>
+		<comment><![CDATA[Product Sub_Category]]></comment>
+	</column>
+	<column name="maintenance" alias="Maintenance Status">
+		<type name="char" length="0"/>
+		<comment><![CDATA[Maintenance status]]></comment>
+	</column>
+	<constraint name="erp_px_cat_g1v2_pk" type="pk-constr" table="&quot;Bronze&quot;.erp_px_cat_g1v2">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="crm_sales_details_cp_has_many_crm_prd_info" type="rel1n" layers="0" alias="prd_key to sls_prd_key"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4b4bb8"
+	 src-table="&quot;Bronze&quot;.crm_sales_details_cp"
+	 dst-table="&quot;Bronze&quot;.crm_prd_info"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="168.006" y="-28.257"/>
+	</label>
+</relationship>
+
+<relationship name="erp_px_cat_g1v2_has_one_crm_prd_info" type="rel11" layers="0" alias="prd_key to id"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4f9243"
+	 src-table="&quot;Bronze&quot;.crm_prd_info"
+	 dst-table="&quot;Bronze&quot;.erp_px_cat_g1v2"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="crm_cust_info_has_many_crm_sales_details" type="rel1n" layers="0" alias="cst_key to sls_cst_id"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#0e8858"
+	 src-table="&quot;Bronze&quot;.crm_cust_info"
+	 dst-table="&quot;Bronze&quot;.crm_sales_details_cp"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="erp_loc_A101_has_one_crm_cust_info" type="rel11" layers="0" alias="cst_key to ci"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#434df3"
+	 src-table="&quot;Bronze&quot;.crm_cust_info"
+	 dst-table="&quot;Bronze&quot;.&quot;erp_loc_A101&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="erp_cust_az12_has_one_crm_cust_info" type="rel11" layers="0" alias="cst_key to cid"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#49e1c3"
+	 src-table="&quot;Bronze&quot;.crm_cust_info"
+	 dst-table="&quot;Bronze&quot;.erp_cust_az12"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>

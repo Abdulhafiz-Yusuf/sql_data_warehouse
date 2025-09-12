@@ -6,3 +6,4 @@ create schema silver;
 
 drop schema if exists gold cascade;
 create schema gold;
+
